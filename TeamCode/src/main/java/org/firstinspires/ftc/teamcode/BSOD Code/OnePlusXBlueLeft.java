@@ -31,7 +31,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @TeleOp
-public class OnePlusXRedLeft extends LinearOpMode
+public class OnePlusXRedRight extends LinearOpMode
 {
     static final double COUNTS_PER_MOTOR_REV = 384.5;
 
@@ -186,7 +186,7 @@ public class OnePlusXRedLeft extends LinearOpMode
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Pose2d startPose = new Pose2d(-31.00, -65.00,  Math.toRadians(0));
+        Pose2d startPose = new Pose2d(31.00, 65.00,  Math.toRadians(180));
         drive.setPoseEstimate(startPose);
         // Next, notice the .strafeRight(10) and .forward(5) functions. We are telling the trajectory that
         // we want to strafe right 10 inches, then go forward 5 inches
@@ -198,23 +198,23 @@ public class OnePlusXRedLeft extends LinearOpMode
         //field layout: https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-manual-part-2-traditional.pdf
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Vector2d(-31,-7), Math.toRadians(315.00))
+                .lineToSplineHeading(new Vector2d(31,7), Math.toRadians(135.00))
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .lineToSplineHeading(new Vector2d(-65, -13.5), Math.toRadians(315.00))
+                .lineToSplineHeading(new Vector2d(65, 13.5), Math.toRadians(135.00))
                 .build();
 
         Trajectory LeftPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(-12, -12), Math.toRadians(180.00))
+                .lineToSplineHeading(new Vector2d(12, 12), Math.toRadians(0.00))
                 .build();
 
         Trajectory RightPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(-12, -60), Math.toRadians(180.00))
+                .lineToSplineHeading(new Vector2d(12, 60), Math.toRadians(0.00))
                 .build();
 
         Trajectory CenterPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(-12, -36), Math.toRadians(180.00))
+                .lineToSplineHeading(new Vector2d(12, 36), Math.toRadians(0.00))
                 .build();
 
 
@@ -291,7 +291,7 @@ public class OnePlusXRedLeft extends LinearOpMode
             while(opModeIsActive() && lift.isBusy){
                 if(lift.getCurrentPosition() == newLiftTarget){
                     lift.setPower(0);
-        }
+                }
             }
         }
     }
