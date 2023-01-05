@@ -190,7 +190,7 @@ public class 1+x extends LinearOpMode
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Pose2d startPose = new Pose2d(63.00, -32.00, Math.toRadians(0));
+        Pose2d startPose = new Pose2d(31.00, -65.00,  Math.toRadians(0));
         drive.setPoseEstimate(startPose);
         // Next, notice the .strafeRight(10) and .forward(5) functions. We are telling the trajectory that
         // we want to strafe right 10 inches, then go forward 5 inches
@@ -202,23 +202,23 @@ public class 1+x extends LinearOpMode
         //field layout: https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-manual-part-2-traditional.pdf
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Vector2d(-11,-32.00), 45.00)
+                .lineToSplineHeading(new Vector2d(31,-7), 45.00)
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .lineToSplineHeading(new Vector2d(-11, -61.00), 45)
+                .lineToSplineHeading(new Vector2d(65, -13.5), 45)
                 .build();
 
         Trajectory LeftPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(-12, -12), 270)
+                .lineToSplineHeading(new Vector2d(12, -12), 180)
                 .build();
 
         Trajectory RightPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(-12, -60), 270)
+                .lineToSplineHeading(new Vector2d(12, -60), 18)
                 .build();
 
         Trajectory CenterPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(-12, -36), 270)
+                .lineToSplineHeading(new Vector2d(12, -36), 180)
                 .build();
 
 
