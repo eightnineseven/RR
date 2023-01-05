@@ -22,47 +22,43 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-import java.util.ArrayList;
-
 @TeleOp
-public class 1+x extends LinearOpMode
-{
-    static final double COUNTS_PER_MOTOR_REV = 384.5;
+public class OnePlusXRedRightSide extends LinearOpMode
+        {
+static final double COUNTS_PER_MOTOR_REV = 384.5;
 
-    OpenCvCamera camera;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+        OpenCvCamera camera;
+        AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    static final double FEET_PER_METER = 3.28084;
+static final double FEET_PER_METER = 3.28084;
 
-    // Lens intrinsics
-    // UNITS ARE PIXELS
-    // NOTE: this calibration is for the C920 webcam at 800x448.
-    // You will need to do your own calibration for other configurations!
-    double fx = 578.272;
-    double fy = 578.272;
-    double cx = 402.145;
-    double cy = 221.506;
+        // Lens intrinsics
+        // UNITS ARE PIXELS
+        // NOTE: this calibration is for the C920 webcam at 800x448.
+        // You will need to do your own calibration for other configurations!
+        double fx = 578.272;
+        double fy = 578.272;
+        double cx = 402.145;
+        double cy = 221.506;
 
-    // UNITS ARE METERS
-    double tagsize = 0.166;
+        // UNITS ARE METERS
+        double tagsize = 0.166;
 
-    int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
+        int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
 
-    AprilTagDetection tagOfInterest = null;
+        AprilTagDetection tagOfInterest = null;
 
-    @Override
-    public void runOpMode()
-    {
+@Override
+public void runOpMode()
+        {
         lift.setDirection(DcMotor.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -74,17 +70,17 @@ public class 1+x extends LinearOpMode
         camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
-            @Override
-            public void onOpened()
-            {
-                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
-            }
+@Override
+public void onOpened()
+        {
+        camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+        }
 
-            @Override
-            public void onError(int errorCode)
-            {
+@Override
+public void onError(int errorCode)
+        {
 
-            }
+        }
         });
 
         telemetry.setMsTransmissionInterval(50);
@@ -95,61 +91,61 @@ public class 1+x extends LinearOpMode
          */
         while (!isStarted() && !isStopRequested())
         {
-            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+        ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-            if(currentDetections.size() != 0)
-            {
-                boolean tagFound = false;
+        if(currentDetections.size() != 0)
+        {
+        boolean tagFound = false;
 
-                for(AprilTagDetection tag : currentDetections)
-                {
-                    if(tag.id == ID_TAG_OF_INTEREST)
-                    {
-                        tagOfInterest = tag;
-                        tagFound = true;
-                        break;
-                    }
-                }
+        for(AprilTagDetection tag : currentDetections)
+        {
+        if(tag.id == ID_TAG_OF_INTEREST)
+        {
+        tagOfInterest = tag;
+        tagFound = true;
+        break;
+        }
+        }
 
-                if(tagFound)
-                {
-                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
-                    tagToTelemetry(tagOfInterest);
-                }
-                else
-                {
-                    telemetry.addLine("Don't see tag of interest :(");
+        if(tagFound)
+        {
+        telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+        tagToTelemetry(tagOfInterest);
+        }
+        else
+        {
+        telemetry.addLine("Don't see tag of interest :(");
 
-                    if(tagOfInterest == null)
-                    {
-                        telemetry.addLine("(The tag has never been seen)");
-                    }
-                    else
-                    {
-                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                        tagToTelemetry(tagOfInterest);
-                    }
-                }
+        if(tagOfInterest == null)
+        {
+        telemetry.addLine("(The tag has never been seen)");
+        }
+        else
+        {
+        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+        tagToTelemetry(tagOfInterest);
+        }
+        }
 
-            }
-            else
-            {
-                telemetry.addLine("Don't see tag of interest :(");
+        }
+        else
+        {
+        telemetry.addLine("Don't see tag of interest :(");
 
-                if(tagOfInterest == null)
-                {
-                    telemetry.addLine("(The tag has never been seen)");
-                }
-                else
-                {
-                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                    tagToTelemetry(tagOfInterest);
-                }
+        if(tagOfInterest == null)
+        {
+        telemetry.addLine("(The tag has never been seen)");
+        }
+        else
+        {
+        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+        tagToTelemetry(tagOfInterest);
+        }
 
-            }
+        }
 
-            telemetry.update();
-            sleep(20);
+        telemetry.update();
+        sleep(20);
         }
 
         /*
@@ -160,14 +156,14 @@ public class 1+x extends LinearOpMode
         /* Update the telemetry */
         if(tagOfInterest != null)
         {
-            telemetry.addLine("Tag snapshot:\n");
-            tagToTelemetry(tagOfInterest);
-            telemetry.update();
+        telemetry.addLine("Tag snapshot:\n");
+        tagToTelemetry(tagOfInterest);
+        telemetry.update();
         }
         else
         {
-            telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
-            telemetry.update();
+        telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
+        telemetry.update();
         }
 
 
@@ -202,24 +198,24 @@ public class 1+x extends LinearOpMode
         //field layout: https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-manual-part-2-traditional.pdf
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Vector2d(31,-7), 45.00)
-                .build();
+        .lineToSplineHeading(new Vector2d(31,-7), Math.toRadians(45.00))
+        .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .lineToSplineHeading(new Vector2d(65, -13.5), 45)
-                .build();
+        .lineToSplineHeading(new Vector2d(65, -13.5), Math.toRadians(45.00))
+        .build();
 
         Trajectory LeftPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(12, -12), 180)
-                .build();
+        .lineToSplineHeading(new Vector2d(12, -12), Math.toRadians(180.00))
+        .build();
 
         Trajectory RightPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(12, -60), 18)
-                .build();
+        .lineToSplineHeading(new Vector2d(12, -60), Math.toRadians(180.00))
+        .build();
 
         Trajectory CenterPark = drive.trajectoryBuilder(traj2.end())
-                .lineToSplineHeading(new Vector2d(12, -36), 180)
-                .build();
+        .lineToSplineHeading(new Vector2d(12, -36), Math.toRadians(180.00))
+        .build();
 
 
 
@@ -233,12 +229,12 @@ public class 1+x extends LinearOpMode
         servo(OPEN);
         arm(0;)
         for(int i = 0; i < x; i++){
-            drive.followTrajectory(traj1);
-            servo(CLOSED);
-            arm(30);
-            drive.followTrajectory(traj2);
-            servo(OPEN);
-            arm(0);
+        drive.followTrajectory(traj1);
+        servo(CLOSED);
+        arm(30);
+        drive.followTrajectory(traj2);
+        servo(OPEN);
+        arm(0);
         }
 
         park();
@@ -261,10 +257,10 @@ public class 1+x extends LinearOpMode
 
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
         while (opModeIsActive()) {sleep(20);}
-    }
+        }
 
-    void tagToTelemetry(AprilTagDetection detection)
-    {
+        void tagToTelemetry(AprilTagDetection detection)
+        {
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
         telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
         telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
@@ -272,41 +268,41 @@ public class 1+x extends LinearOpMode
         telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
         telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
-    }
-
-    //used for actual movement
-    public static void servo(String servo){
-        if(servo == "OPEN"){
-            LeftServo.setPosition(0.85);
-            RightServo.setPosition(0.85);
-        } else {
-            LeftServo.setPosition(1);
-            RightServo.setPosition(1);
         }
-    }
-    public static void arm(int armInch){
+
+//used for actual movement
+public static void servo(String servo){
+        if(servo == "OPEN"){
+        LeftServo.setPosition(0.85);
+        RightServo.setPosition(0.85);
+        } else {
+        LeftServo.setPosition(1);
+        RightServo.setPosition(1);
+        }
+        }
+public static void arm(int armInch){
         int newLiftTarget;
         if(opModeIsActive()){
-            newLiftTarget = lift.getCurrentPosition() + (int)(armInch * COUNTS_PER_MOTOR_REV);
-            lift.setTargetPosition(newLiftTarget);
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            runtime.reset();
-            lift.setPower(0.3);
-            while(opModeIsActive() && lift.isBusy){
-                if(lift.getCurrentPosition() == newLiftTarget){
-                    lift.setPower(0);
+        newLiftTarget = lift.getCurrentPosition() + (int)(armInch * COUNTS_PER_MOTOR_REV);
+        lift.setTargetPosition(newLiftTarget);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runtime.reset();
+        lift.setPower(0.3);
+        while(opModeIsActive() && lift.isBusy){
+        if(lift.getCurrentPosition() == newLiftTarget){
+        lift.setPower(0);
         }
-            }
         }
-    }
-    public static void park(){
+        }
+        }
+public static void park(){
         if(TagOfInterest == Left){
-            drive.followTrajectory(LeftPark);
+        drive.followTrajectory(LeftPark);
         } else if(TagOfInterest == Center){
-            drive.followTrajectory(CenterPark);
+        drive.followTrajectory(CenterPark);
         } else{
-            drive.followTrajectory(RightPark);
+        drive.followTrajectory(RightPark);
         }
-    }
+        }
 
-}
+        }
