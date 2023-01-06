@@ -104,6 +104,7 @@ public class OnePlusXRedRight extends LinearOpMode
                         tagOfInterest = tag;
                         tagFound = true;
                         break;
+                        servo(CLOSE);
                     }
                 }
 
@@ -183,6 +184,8 @@ public class OnePlusXRedRight extends LinearOpMode
 
         //1 + x for stacking cones
         int x = 3;
+        //lowers lift more depending on # of cones on stack
+        int CupStack = -20;
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
@@ -197,12 +200,41 @@ public class OnePlusXRedRight extends LinearOpMode
 
         //field layout: https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-manual-part-2-traditional.pdf
 
-        Trajectory traj1 = drive.trajectoryBuilder(startPose)
+        Trajectory trajStart = drive.trajectoryBuilder(startPose)
                 .lineToSplineHeading(new Vector2d(31,7), Math.toRadians(135.00))
+                .temporalmarker(0.1, () -> {
+                arm(30);
+
+    })
+
+                .displacementmarker(() ->{
+                    arm(-2);
+                    servo(OPEN);
+                })
+                .build();
+        Trajectory traj1 = drive.trajectoryBuilder(traj2.end())
+                .lineToSplineHeading(new Vector2d(31,7), Math.toRadians(135.00))
+                .temporalmarker(0.2, () -> {
+                    arm(30);
+                })
+                .displacementmarker(() {
+                    arm(-2);
+                    servo(OPEN);
+    })
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .lineToSplineHeading(new Vector2d(65, 13.5), Math.toRadians(135.00))
+                .lineToSplineHeading(new Vector2d(65, 13.5), Math.toRadians(90))
+                .temporalmarker(0.5, () -> {
+                    arm(CupStack);
+
+
+                })
+                .displacementmarker(() {
+                    servo(CLOSED);
+                    arm(3);
+
+    })
                 .build();
 
         Trajectory LeftPark = drive.trajectoryBuilder(traj2.end())
@@ -224,17 +256,12 @@ public class OnePlusXRedRight extends LinearOpMode
 
         if(isStopRequested()) return;
 
-        drive.followTrajectory(traj1);
-        arm(30);
-        servo(OPEN);
-        arm(0;)
+        drive.followTrajectory(trajStart);
         for(int i = 0; i < x; i++){
-            drive.followTrajectory(traj1);
-            servo(CLOSED);
-            arm(30);
             drive.followTrajectory(traj2);
-            servo(OPEN);
-            arm(0);
+            CupStack = CupStack - 2;
+            drive.followTrajectory(traj1);
+
         }
 
         park();
