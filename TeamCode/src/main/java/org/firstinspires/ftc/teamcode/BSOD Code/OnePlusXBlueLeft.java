@@ -189,7 +189,7 @@ public class OnePlusXRedRight extends LinearOpMode
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Pose2d startPose = new Pose2d(31.00, 65.00,  Math.toRadians(180));
+        Pose2d startPose = new Pose2d(41.00, 65.00,  Math.toRadians(180));
         drive.setPoseEstimate(startPose);
         // Next, notice the .strafeRight(10) and .forward(5) functions. We are telling the trajectory that
         // we want to strafe right 10 inches, then go forward 5 inches
